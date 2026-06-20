@@ -89,5 +89,3 @@ Thumbs.db
 *.mov
 *.wmv
 /generated/prisma
-
-.env

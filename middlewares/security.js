@@ -213,10 +213,18 @@ module.exports = (app) => {
     }
 
     // ❌ Block browser navigation attempts (unless from authorized origin)
+    // Only check for actual page navigations, not API/AJAX requests
+    const isApiRequest =
+      req.headers["sec-fetch-mode"] === "cors" ||
+      req.headers["x-requested-with"] === "XMLHttpRequest" ||
+      (req.headers["content-type"] && req.headers["content-type"].includes("application/json")) ||
+      req.path.startsWith("/api/");
+
     const isBrowserNav =
-      req.headers["sec-fetch-dest"] === "document" ||
+      !isApiRequest &&
+      (req.headers["sec-fetch-dest"] === "document" ||
       req.headers["sec-fetch-mode"] === "navigate" ||
-      (req.headers["accept"] && req.headers["accept"].includes("text/html"));
+      (req.headers["accept"] && req.headers["accept"].includes("text/html")));
 
     const origin = req.get("Origin");
     const allowedOrigins = process.env.ALLOWED_ORIGINS
