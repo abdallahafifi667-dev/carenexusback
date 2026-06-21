@@ -89,3 +89,7 @@ Thumbs.db
 *.mov
 *.wmv
 /generated/prisma
+
+*.md
+*.docx
+*.pdf
