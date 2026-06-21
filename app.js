@@ -50,8 +50,8 @@ const initializeApp = async () => {
     const providerRouter = require("./users-core/routes/provider");
 
 
-    // securityMiddleware(app);
-    app.use(cors());
+    securityMiddleware(app);
+    // app.use(cors());
 
 
     app.use("/api/users", usersRouter);

@@ -584,19 +584,18 @@ module.exports = (app) => {
 
   // 1. حماية الـ Host المحسنة
   app.use((req, res, next) => {
-    const allowedHosts = process.env.ALLOWED_HOSTS
-      ? process.env.ALLOWED_HOSTS.split(",")
-      : ["localhost", "127.0.0.1", "example.com", "www.example.com"];
-
-    if (!allowedHosts.includes(req.hostname)) {
-      securityLogger.attack(
-        `محاولة وصول من host غير مصرح: ${req.hostname}`,
-        req,
-      );
-      return res.status(403).json({
-        error: "طلب غير مصرح به",
-        code: "FORBIDDEN_HOST",
-      });
+    if (process.env.ALLOWED_HOSTS) {
+      const allowedHosts = process.env.ALLOWED_HOSTS.split(",").map(h => h.trim());
+      if (!allowedHosts.includes(req.hostname)) {
+        securityLogger.attack(
+          `محاولة وصول من host غير مصرح: ${req.hostname}`,
+          req,
+        );
+        return res.status(403).json({
+          error: "طلب غير مصرح به",
+          code: "FORBIDDEN_HOST",
+        });
+      }
     }
     next();
   });
