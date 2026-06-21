@@ -4,6 +4,7 @@ require("dotenv").config();
 const express = require("express");
 // const { connect } = require("./config/conectet");
 const securityMiddleware = require("./middlewares/security");
+const cors = require("cors");
 const {
   errorNotFound,
   errorHandler,
@@ -49,7 +50,8 @@ const initializeApp = async () => {
     const providerRouter = require("./users-core/routes/provider");
 
 
-    securityMiddleware(app);
+    // securityMiddleware(app);
+    app.use(cors());
 
 
     app.use("/api/users", usersRouter);
